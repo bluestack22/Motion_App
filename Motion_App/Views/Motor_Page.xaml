@@ -1,0 +1,338 @@
+﻿<Page x:Class="Motion_App.View.Motor_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Motion_App.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1200"
+      Title="Motor_Page">
+
+    <Grid Background="#F3F4F6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="240*"/>
+            <RowDefinition Height="160*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.6*"/>
+            <ColumnDefinition Width="1.1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left top: XY plane with Z slider -->
+        <Grid Grid.Row="0" Grid.Column="0" Margin="6,6,6,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="2D MAP" Style="{DynamicResource SectionTitleStyle}" Margin="12,0,0,4"/>
+            <Border Grid.Row="1" Style="{DynamicResource PanelBorderStyle}">
+                <Border BorderBrush="#CBD5E1" BorderThickness="1" Background="#FCFCFD">
+                    <Grid>
+                        <Line X1="0" Y1="110" X2="1000" Y2="110" Stroke="#9CA3AF" StrokeThickness="1"/>
+                        <Line X1="120" Y1="0" X2="120" Y2="1000" Stroke="#9CA3AF" StrokeThickness="1"/>
+                        <Ellipse Width="10" Height="10" Fill="#EF4444" Stroke="#B91C1C" StrokeThickness="1"
+                                 HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="116,0,0,106"/>
+                        <TextBlock Text="Goc (0,0)" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="134,0,0,92" Foreground="#374151"/>
+                        <TextBlock Text="Con tro truc (demo)" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Foreground="#6B7280"/>
+                    </Grid>
+                </Border>
+            </Border>
+            <Grid Grid.Row="2" Margin="12,0,12,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Z Axis:" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,8,0"/>
+                <Slider Grid.Column="1" Minimum="0" Maximum="1000" Value="320" VerticalAlignment="Center" Margin="0,0,380,0"/>
+                <TextBox Grid.Column="1" Text="320" Margin="203,-1,0,1" HorizontalAlignment="Left" Width="42"/>
+            </Grid>
+        </Grid>
+
+        <!-- Right top: camera view -->
+        <Border Grid.Row="0" Grid.Column="1" Style="{DynamicResource PanelBorderStyle}" Margin="6,6,6,6">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="VISION VIEW" Style="{DynamicResource SectionTitleStyle}"/>
+                <Border Grid.Row="1" BorderBrush="#CBD5E1" BorderThickness="1" Background="#F9FAFB">
+                    <Grid>
+                        <TextBlock Text="Camera Preview" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#6B7280" FontSize="16"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Left bottom: axis values, IO, modbus log -->
+        <Grid Grid.Row="1" Grid.Column="0" Margin="6,6,6,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.05*"/>
+                <ColumnDefinition Width="1.35*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="0" Style="{DynamicResource PanelBorderStyle}" Margin="6,6,6,6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Current Position (Int32)" Style="{DynamicResource SectionTitleStyle}"/>
+                    <Grid Grid.Row="1" Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80*"/>
+                            <ColumnDefinition Width="80*"/>
+                            <ColumnDefinition Width="80*"/>
+                            <ColumnDefinition Width="21*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="X: 12540" Style="{DynamicResource FieldLabelStyle}"/>
+                        <TextBlock Grid.Column="1" Text="Y: -3360" Style="{DynamicResource FieldLabelStyle}" Grid.ColumnSpan="3"/>
+                        <TextBlock Grid.Column="2" Text="Z: 320" Style="{DynamicResource FieldLabelStyle}" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" Style="{DynamicResource PanelBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Input / Output signals" Style="{DynamicResource SectionTitleStyle}"/>
+
+                    <Grid Grid.Row="1" Margin="0,2,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Input:" Style="{DynamicResource FieldLabelStyle}"/>
+                        <UniformGrid Grid.Column="1" Columns="4" Margin="8,0,0,0">
+                            <CheckBox Content="IN_00" IsChecked="True" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_01" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_02" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_03" IsChecked="True" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_04" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_05" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_06" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_07" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_08" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_09" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_10" IsEnabled="False" Margin="2"/>
+                            <CheckBox Content="IN_11" IsEnabled="False" Margin="2"/>
+                        </UniformGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Output:" Style="{DynamicResource FieldLabelStyle}"/>
+                        <UniformGrid Grid.Column="1" Columns="4" Margin="8,0,0,0">
+                            <ToggleButton Content="OUT_00" Margin="2"/>
+                            <ToggleButton Content="OUT_01" Margin="2"/>
+                            <ToggleButton Content="OUT_02" Margin="2"/>
+                            <ToggleButton Content="OUT_03" Margin="2"/>
+                            <ToggleButton Content="OUT_04" Margin="2"/>
+                            <ToggleButton Content="OUT_05" Margin="2"/>
+                            <ToggleButton Content="OUT_06" Margin="2"/>
+                            <ToggleButton Content="OUT_07" Margin="2"/>
+                            <ToggleButton Content="OUT_08" Margin="2"/>
+                            <ToggleButton Content="OUT_09" Margin="2"/>
+                            <ToggleButton Content="OUT_10" Margin="2"/>
+                            <ToggleButton Content="OUT_11" Margin="2"/>
+                        </UniformGrid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Style="{DynamicResource PanelBorderStyle}" Margin="6,6,6,6" Grid.RowSpan="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Command / Modbus log" Style="{DynamicResource SectionTitleStyle}" Margin="0,0,8,8"/>
+                        <TextBlock Grid.Column="1" Text="Refresh (ms):" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,8,8"/>
+                        <ComboBox Grid.Column="2" SelectedIndex="1" Margin="0,0,0,8">
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="10"/>
+                            <ComboBoxItem Content="50"/>
+                            <ComboBoxItem Content="100"/>
+                            <ComboBoxItem Content="200"/>
+                            <ComboBoxItem Content="500"/>
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Clear log" Style="{DynamicResource MotorButtonStyle}"/>
+                        <Button Grid.Column="1" Content="Save log" Style="{DynamicResource MotorButtonStyle}"/>
+                        <CheckBox Grid.Column="2" Content="Auto scroll" Margin="10,6,0,0" IsChecked="True"/>
+                    </Grid>
+
+                    <TextBox Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                             TextWrapping="NoWrap" AcceptsReturn="True" FontFamily="Consolas" FontSize="12"
+                             Text="[14:20:10.125] TX 01 06 00 10 00 64&#x0a;[14:20:10.138] RX 01 06 00 10 00 64&#x0a;[14:20:11.204] ERR Axis Y over current"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Right bottom: controls -->
+        <Border Grid.Row="1" Grid.Column="1" Style="{DynamicResource PanelBorderStyle}" Margin="6,6,6,6">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Motor controls" Style="{DynamicResource SectionTitleStyle}"/>
+
+                <!-- Absolute position set -->
+                <Border Grid.Row="1" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Set Absolute Position" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,0,6"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="X:" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,4,0"/>
+                            <TextBox Grid.Column="1" Text="0" ToolTip="Range: -500000 .. 500000"/>
+                            <TextBlock Grid.Column="2" Text="Y:" Style="{DynamicResource FieldLabelStyle}" Margin="8,0,4,0"/>
+                            <TextBox Grid.Column="3" Text="0" ToolTip="Range: -500000 .. 500000"/>
+                            <TextBlock Grid.Column="4" Text="Z:" Style="{DynamicResource FieldLabelStyle}" Margin="8,0,4,0"/>
+                            <TextBox Grid.Column="5" Text="0" ToolTip="Range: 0 .. 100000"/>
+                            <Button Grid.Column="6" Content="Set" Style="{DynamicResource MotorButtonStyle}" Margin="8,0,0,0"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Jog -->
+                <Border Grid.Row="2" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Jog 3 truc (+ / -)" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,0,6"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="X:" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,4,0"/>
+                                <Button Grid.Column="1" Content="-" Style="{DynamicResource MotorButtonStyle }" />
+                                <Button Grid.Column="2" Content="+" Style="{DynamicResource MotorButtonStyle}"/>
+                            </Grid>
+
+                            <Grid Grid.Column="1" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Y:" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,4,0"/>
+                                <Button Grid.Column="1" Content="-" Style="{DynamicResource MotorButtonStyle}"/>
+                                <Button Grid.Column="2" Content="+" Style="{DynamicResource MotorButtonStyle}"/>
+                            </Grid>
+
+                            <Grid Grid.Column="2" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Z:" Style="{DynamicResource FieldLabelStyle}" Margin="0,0,4,0"/>
+                                <Button Grid.Column="1" Content="-" Style="{DynamicResource MotorButtonStyle}"/>
+                                <Button Grid.Column="2" Content="+" Style="{DynamicResource MotorButtonStyle}"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <!-- Speed -->
+                <Border Grid.Row="3" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="275*"/>
+                            <ColumnDefinition Width="166*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Speed Motor (%)" Style="{DynamicResource FieldLabelStyle}" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="56"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider Grid.Column="0" Minimum="0" Maximum="100" Value="40"/>
+                            <TextBox Grid.Column="1" Margin="8,0,0,0" Text="40"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <!-- Start stop -->
+                <Border Grid.Row="4" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Start" Style="{DynamicResource MotorButtonStyle}" Background="#DCFCE7" BorderBrush="#86EFAC"/>
+                        <Button Grid.Column="1" Content="Stop" Style="{DynamicResource MotorButtonStyle}" Background="#FEE2E2" BorderBrush="#FCA5A5"/>
+                        <Button Grid.Column="2" Content="Home" Style="{DynamicResource MotorButtonStyle}"/>
+                        <Button Grid.Column="3" Content="Reset Alarm" Style="{DynamicResource MotorButtonStyle}"/>
+                        <CheckBox Grid.Column="4" Content="Enable servo" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </Grid>
+                </Border>
+
+                
+            </Grid>
+        </Border>
+    </Grid>
+
+</Page>

@@ -1,0 +1,92 @@
+﻿<Page x:Class="Motion_App.View.Trace_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Motion_App.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1200
+      "
+      Title="Trace_Page">
+
+    <Grid Background="#F3F4F6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top: system log (file-level, camera save, modbus connect...) -->
+        <Border Grid.Row="0" Margin="10,8,10,4" Background="White" BorderBrush="#D5D9DF" BorderThickness="1" CornerRadius="8" Padding="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="System log" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <Grid Grid.Row="1" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Level:" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" SelectedIndex="0" Margin="0,0,8,0">
+                        <ComboBoxItem Content="Info"/>
+                        <ComboBoxItem Content="Warning"/>
+                        <ComboBoxItem Content="Error"/>
+                    </ComboBox>
+                    <TextBlock Grid.Column="2" Text="Filter:" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="3" />
+                </Grid>
+                <TextBox Grid.Row="2"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         AcceptsReturn="True"
+                         FontFamily="Consolas"
+                         FontSize="12"
+                         TextWrapping="NoWrap"
+                         Text="[15:01:10] Save camera frame to C:\log\cam_001.png&#x0a;[15:01:11] Connect Modbus COM3 115200 OK"/>
+            </Grid>
+        </Border>
+
+        <!-- Bottom: realtime trace (modbus, CAN...) -->
+        <Border Grid.Row="1" Margin="10,0,10,8" Background="White" BorderBrush="#D5D9DF" BorderThickness="1" CornerRadius="8" Padding="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Realtime trace" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                <Grid Grid.Row="1" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Bus:" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" SelectedIndex="0" Margin="0,0,8,0">
+                        <ComboBoxItem Content="Modbus"/>
+                        <ComboBoxItem Content="CAN"/>
+                        <ComboBoxItem Content="Other"/>
+                    </ComboBox>
+                    <TextBlock Grid.Column="2" Text="Interval (ms):" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="3" Text="50" Margin="0,0,8,0"/>
+                    <CheckBox Grid.Column="4" Content="Enable trace" IsChecked="True" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBox Grid.Row="2"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         AcceptsReturn="True"
+                         FontFamily="Consolas"
+                         FontSize="12"
+                         TextWrapping="NoWrap"
+                         Text="[15:01:10.123] MB TX 01 03 00 10 00 02&#x0a;[15:01:10.130] MB RX 01 03 04 00 00 00 10&#x0a;[15:01:10.210] CAN ID 18FF50E5 DLC 8 01 00 00 00 00 00 00 00"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

@@ -1,0 +1,195 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Color tokens -->
+    <SolidColorBrush x:Key="AppBrush.Background" Color="#F3F4F6"/>
+    <SolidColorBrush x:Key="AppBrush.Surface" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppBrush.Border" Color="#D5D9DF"/>
+    <SolidColorBrush x:Key="AppBrush.TextPrimary" Color="#1F2937"/>
+    <SolidColorBrush x:Key="AppBrush.TextSecondary" Color="#374151"/>
+    <SolidColorBrush x:Key="AppBrush.ButtonBg" Color="#F8F9FB"/>
+    <SolidColorBrush x:Key="AppBrush.ButtonBorder" Color="#C7CDD6"/>
+
+    <!-- Shared dimensions -->
+    <CornerRadius x:Key="AppRadius.Small">4</CornerRadius>
+    <CornerRadius x:Key="AppRadius.Medium">8</CornerRadius>
+    <CornerRadius x:Key="AppRadius.Large">10</CornerRadius>
+    <Thickness x:Key="AppSpacing.ControlMargin">4</Thickness>
+
+    <!-- Base text -->
+    <Style x:Key="AppTextBaseStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextSecondary}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="AppSectionTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource AppTextBaseStyle}">
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <!-- Shared panel -->
+    <Style x:Key="AppPanelBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource AppBrush.Surface}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBrush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource AppRadius.Medium}"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="Margin" Value="6"/>
+    </Style>
+
+    <!-- Shared button -->
+    <Style x:Key="AppButtonStyle" TargetType="Button">
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Background" Value="{StaticResource AppBrush.ButtonBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBrush.ButtonBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="buttonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource AppRadius.Small}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="2"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="#EEF2F7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="#E6ECF4"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="buttonBorder" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Shared toggle -->
+    <Style x:Key="AppToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Background" Value="{StaticResource AppBrush.ButtonBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBrush.ButtonBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="toggleBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource AppRadius.Small}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="2"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="toggleBorder" Property="Background" Value="#E7F0FF"/>
+                            <Setter TargetName="toggleBorder" Property="BorderBrush" Value="#93C5FD"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="toggleBorder" Property="Background" Value="#EEF2F7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Inputs -->
+    <Style x:Key="AppTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="6,4"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBrush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{StaticResource AppBrush.Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style x:Key="AppComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBrush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{StaticResource AppBrush.Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style x:Key="AppGroupBoxStyle" TargetType="GroupBox">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource AppBrush.TextPrimary}"/>
+        <Setter Property="Margin" Value="6"/>
+        <Setter Property="Padding" Value="6"/>
+    </Style>
+
+    <Style x:Key="AppFieldLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource AppTextBaseStyle}">
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+
+    <Style x:Key="AppModeRadioButtonStyle" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource AppBrush.TextPrimary}"/>
+        <Setter Property="Background" Value="{DynamicResource AppBrush.ButtonBg}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBrush.ButtonBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,6"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,4"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#EEF2F7"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#E7F0FF"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="#93C5FD"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Compatibility aliases so pages can share global styles -->
+    <Style x:Key="PanelBorderStyle" TargetType="Border" BasedOn="{StaticResource AppPanelBorderStyle}"/>
+    <Style x:Key="SectionTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource AppSectionTitleStyle}"/>
+    <Style x:Key="FieldLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource AppTextBaseStyle}"/>
+    <Style x:Key="MotorButtonStyle" TargetType="Button" BasedOn="{StaticResource AppButtonStyle}"/>
+    <Style x:Key="SettingPanelStyle" TargetType="Border" BasedOn="{StaticResource AppPanelBorderStyle}"/>
+    <Style x:Key="SettingTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource AppSectionTitleStyle}"/>
+    <Style x:Key="SettingLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource AppTextBaseStyle}"/>
+    <Style x:Key="SettingButtonStyle" TargetType="Button" BasedOn="{StaticResource AppButtonStyle}"/>
+    <Style x:Key="VisionButtonStyle" TargetType="Button" BasedOn="{StaticResource AppButtonStyle}"/>
+    <Style x:Key="Vision_Window" TargetType="RadioButton" BasedOn="{StaticResource AppModeRadioButtonStyle}"/>
+    <Style x:Key="FieldLabel" TargetType="TextBlock" BasedOn="{StaticResource AppFieldLabelStyle}"/>
+</ResourceDictionary>

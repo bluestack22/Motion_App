@@ -1,0 +1,404 @@
+﻿<Page x:Class="Motion_App.View.Setting_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Motion_App.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1200"
+      Title="Setting_Page">
+
+    <Grid Background="#F3F4F6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left column: connection + camera/AI + IO map -->
+        <Grid Grid.Row="0" Grid.Column="0" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Connection" Style="{DynamicResource SettingTitleStyle}"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: list/select connection type -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Type:" Style="{DynamicResource SettingLabelStyle}" Margin="0,0,0,4"/>
+                            <ListBox x:Name="ConnectionTypeList" SelectionChanged="ConnectionTypeList_SelectionChanged">
+                                <ListBoxItem Content="Serial (COM)" IsSelected="True"/>
+                                <ListBoxItem Content="CAN"/>
+                                <ListBoxItem Content="I2C"/>
+                                <ListBoxItem Content="LIN"/>
+                                <ListBoxItem Content="Ethernet/TCP"/>
+                                <ListBoxItem Content="SPI"/>
+                            </ListBox>
+                        </StackPanel>
+
+                        <!-- Right: connection properties per type (layout sẵn, code-behind sẽ toggle Visibility theo Type) -->
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Serial (COM) -->
+                            <Grid x:Name="SerialConnectionPanel">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Port:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1" Margin="0,0,8,0"                         
+                                        ItemsSource="{Binding Port}"
+                                        SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
+                                        DisplayMemberPath="Display"/>
+
+                                    <TextBlock Grid.Column="2" Text="Baud:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="3"
+                                        ItemsSource="{Binding BaudRate}"
+                                        SelectedItem="{Binding SelectedBaudRate, Mode=TwoWay}">
+                                    </ComboBox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Data bits:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1" Margin="0,0,8,0"
+                                        ItemsSource="{Binding DataBits}"
+                                        SelectedItem="{Binding SelectedDataBits, Mode=TwoWay}">
+                                    </ComboBox>
+                                    <TextBlock Grid.Column="2" Text="Parity:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="3"
+                                        ItemsSource="{Binding Parity}"
+                                        SelectedItem="{Binding SelectedParity, Mode=TwoWay}">
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+
+                            <!-- CAN -->
+                            <Grid x:Name="CanConnectionPanel" Margin="0,8,0,0" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Mode:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1" Margin="0,0,8,0">
+                                        <ComboBoxItem Content="High speed"/>
+                                        <ComboBoxItem Content="Low speed"/>
+                                        <ComboBoxItem Content="FD"/>
+                                    </ComboBox>
+                                    <TextBlock Grid.Column="2" Text="Baud:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="3">
+                                        <ComboBoxItem Content="125 kbps"/>
+                                        <ComboBoxItem Content="250 kbps"/>
+                                        <ComboBoxItem Content="500 kbps"/>
+                                        <ComboBoxItem Content="1 Mbps"/>
+                                    </ComboBox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Bit timing:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="1" Text="PROP:1 PH1:2 PH2:1 SJW:1"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Ethernet/TCP (ví dụ) -->
+                            <Grid x:Name="EthernetConnectionPanel" Margin="0,8,0,0" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="IP:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="1" Margin="0,0,8,0" Text="192.168.0.10"/>
+                                    <TextBlock Grid.Column="2" Text="Port:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="3" Text="502"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Protocol:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1">
+                                        <ComboBoxItem Content="TCP"/>
+                                        <ComboBoxItem Content="UDP"/>
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Connect / Disconnect buttons -->
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button x:Name="BtnConnect" Content="Connect" Style="{DynamicResource SettingButtonStyle}" Width="100" Height="50"
+                                        Command="{Binding ConnectCommand}"/>
+                                <Button x:Name="BtnDisconnect" Content="Disconnect" Style="{DynamicResource SettingButtonStyle}" Width="100" Height="50"
+                                        Command="{Binding DisconnectCommand}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Camera / Source" Style="{DynamicResource SettingTitleStyle}"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: chọn loại source -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Type:" Style="{DynamicResource SettingLabelStyle}" Margin="0,0,0,4"/>
+                            <ListBox x:Name="CameraSourceList" SelectionChanged="CameraSourceList_SelectionChanged">
+                                <ListBoxItem Content="Camera PC" IsSelected="True"/>
+                                <ListBoxItem Content="Camera Basler"/>
+                                <ListBoxItem Content="(SDK)"/>
+                                <ListBoxItem Content="Folder/file"/>
+                            </ListBox>
+                        </StackPanel>
+
+                        <!-- Right: config theo từng loại -->
+                        <Grid Grid.Column="1">
+                            <!-- Camera thường -->
+                            <Grid x:Name="NormalCameraPanel">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Index:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Width="200"
+                                    Height="30"
+                                    ItemsSource="{Binding CameraList}"
+                                    SelectedItem="{Binding SelectedCamera}"
+                                    DisplayMemberPath="Display" Margin="0,0,163,0" Grid.Column="1"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Format:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1" Margin="0,0,8,0" SelectedIndex="0">
+                                        <ComboBoxItem Content="RGB"/>
+                                        <ComboBoxItem Content="Gray"/>
+                                    </ComboBox>
+                                    <Button Grid.Column="2" Content="Apply source" Style="{DynamicResource SettingButtonStyle}" Command="{Binding ApplySourceCommand}"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Basler camera -->
+                            <Grid x:Name="BaslerCameraPanel" Margin="0,8,0,0" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Danh sach cam:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <ComboBox Grid.Column="1">
+                                        <ComboBoxItem Content="(Scan from SDK)"/>
+                                    </ComboBox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Serial:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="1" Margin="0,0,8,0"/>
+                                    <Button Grid.Column="2" Content="Apply source" Style="{DynamicResource SettingButtonStyle}"/>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Folder / file ảnh -->
+                            <Grid x:Name="FolderImagePanel" Margin="0,8,0,0" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Folder:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="1" Margin="0,0,8,0" Text="C:\images\"/>
+                                    <Button Grid.Column="2" Content="Browse..." Style="{DynamicResource SettingButtonStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Files:" Style="{DynamicResource SettingLabelStyle}"/>
+                                    <TextBox Grid.Column="1" Margin="0,0,8,0" Text="*.png; *.jpg; *.bmp"/>
+                                    <Button Grid.Column="2" Content="Apply source" Style="{DynamicResource SettingButtonStyle}"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Bang map I/O (demo de ban map tiep)" Style="{DynamicResource SettingTitleStyle}"/>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" HeadersVisibility="Column"
+                              CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Signal" Width="*" Binding="{Binding}"/>
+                            <DataGridTextColumn Header="Address" Width="100" Binding="{Binding}"/>
+                            <DataGridTextColumn Header="Note" Width="1.3*" Binding="{Binding}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Right column: safety + ui -->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="AI Model" Style="{DynamicResource SettingTitleStyle}"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Path:" Style="{DynamicResource SettingLabelStyle}"/>
+                        <TextBox Grid.Column="1" Margin="0,0,8,0" Text="C:\models\model.onnx"/>
+                        <Button Grid.Column="2" Content="Browse..." Style="{DynamicResource SettingButtonStyle}"/>
+                        <Button Grid.Column="3" Content="Apply" Style="{DynamicResource SettingButtonStyle}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="AI Parameters" Style="{DynamicResource SettingTitleStyle}"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" Content="Use GPU (neu co)" Margin="2"/>
+                        <CheckBox Grid.Column="1" Content="Save detection result" Margin="2"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Style="{DynamicResource SettingPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Ghi chu cau hinh" Style="{DynamicResource SettingTitleStyle}"/>
+                    <TextBox Grid.Row="1" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"
+                             Text="Dat ghi chu cho cau hinh o day (version, ngay thay doi, nguoi cap nhat...)."/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Footer actions -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Margin="12,0,12,10" Background="White" BorderBrush="#D5D9DF" BorderThickness="1" CornerRadius="8" Padding="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Trang thai: Chua luu thay doi" Style="{DynamicResource SettingLabelStyle}"/>
+                <Button Grid.Column="1" Content="Test Connected" Style="{DynamicResource SettingButtonStyle}"/>
+                <Button Grid.Column="2" Content="Luu cau hinh" Style="{DynamicResource SettingButtonStyle}" Background="#DCFCE7" BorderBrush="#86EFAC"/>
+                <Button Grid.Column="3" Content="Khoi phuc mac dinh" Style="{DynamicResource SettingButtonStyle}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
