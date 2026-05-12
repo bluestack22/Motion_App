@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ namespace Motion_App.View
     /// <summary>
     /// Interaction logic for Motor_Page.xaml
     /// </summary>
-    public partial class Motor_Page : Page
+    public partial class Motor_Page : UserControl
     {
         public Motor_Page()
         {

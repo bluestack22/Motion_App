@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,14 @@ namespace Motion_App.ViewModels
         OpenCV,
         AI
     }
+
+    public enum OpenCVProcessMode
+    {
+        None,
+        Blur,
+        Edges,
+        Threshold
+    }
     public partial class VisionModel : ObservableObject
     {
         public VisionModel()
@@ -32,6 +40,7 @@ namespace Motion_App.ViewModels
             WebCamService.Instance.FrameReady += OnFrameReady;
         }
         [ObservableProperty] private VisionMode _currentMode = VisionMode.OpenCV;
+        [ObservableProperty] private OpenCVProcessMode _currentOpenCVMode = OpenCVProcessMode.None;
         //-----------------Feeds-----------------
         // Backend image data
         private Mat? _rawFrame;
@@ -43,26 +52,49 @@ namespace Motion_App.ViewModels
         {
             try
             {
-                // Convert sang WPF image
-                var bmp = mat.ToBitmapSource();
+                // 1. Convert raw to WPF image for CameraFeed
+                var rawBmp = mat.ToBitmapSource();
+                if (rawBmp.CanFreeze) rawBmp.Freeze();
 
-                // Freeze để cross-thread safe
-                if (bmp.CanFreeze)
-                    bmp.Freeze();
+                // 2. Process frame if in OpenCV mode
+                Mat? processedMat = null;
+                if (CurrentMode == VisionMode.OpenCV)
+                {
+                    processedMat = Logic.Vision_BLL.Process(
+                        mat, 
+                        CurrentOpenCVMode.ToString(), 
+                        Threshold, 
+                        Blur, 
+                        CannyLow, 
+                        CannyHigh,
+                        SelectedKernel);
+                }
+
+                BitmapSource? processedBmp = null;
+                if (processedMat != null && !processedMat.Empty())
+                {
+                    processedBmp = processedMat.ToBitmapSource();
+                    if (processedBmp.CanFreeze) processedBmp.Freeze();
+                    processedMat.Dispose();
+                }
 
                 // Update UI thread
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    CameraFeed = bmp;
+                    CameraFeed = rawBmp;
+                    if (processedBmp != null)
+                    {
+                        ProcessedFeed = processedBmp;
+                    }
                 });
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error processing frame: {ex.Message}");
             }
             finally
             {
-                // QUAN TRỌNG
-                // Dispose Mat để tránh leak RAM
+                // QUAN TRỌNG: Dispose Mat để tránh leak RAM
                 mat.Dispose();
             }
         }
@@ -117,18 +149,15 @@ namespace Motion_App.ViewModels
         }
         [RelayCommand] private void ThresholdView()
         {
-            // Implement logic to handle threshold changes
-            System.Windows.MessageBox.Show("Threshold changed!", "Threshold Change", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            CurrentOpenCVMode = OpenCVProcessMode.Threshold;
         }
         [RelayCommand] private void BlurView()
         {
-            // Implement logic to handle blur changes
-            System.Windows.MessageBox.Show("Blur changed!", "Blur Change", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            CurrentOpenCVMode = OpenCVProcessMode.Blur;
         }
         [RelayCommand] private void EdgesView()
         {
-            // Implement logic to handle Canny low threshold changes
-            System.Windows.MessageBox.Show("Edges changed!", "Edges Change", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            CurrentOpenCVMode = OpenCVProcessMode.Edges;
         }
         [RelayCommand] private void Prev()
         {

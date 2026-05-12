@@ -15,7 +15,7 @@ namespace Motion_App.Service
         public event Action<string>? DataReceived;
 
         private SerialService() { }
-
+        public static string[] ScanSerialPort() => SerialPort.GetPortNames();  
         public bool Connect(string portName, int baudRate, int dataBits, string parityString)
         {
             try

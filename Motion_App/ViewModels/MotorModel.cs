@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Motion_App.ViewModels
 {
-    internal class MotorModel
+    public class MotorModel
     {
     }
 }

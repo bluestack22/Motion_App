@@ -1,7 +1,10 @@
-﻿using OpenCvSharp;
+using OpenCvSharp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using Motion_App.ViewModels;
 
 namespace Motion_App.Service
@@ -29,15 +32,17 @@ namespace Motion_App.Service
         }
         // =========================
         // SCAN CAMERAS
-        public List<SelectionItem<int>> ScanCameras(int maxTest = 10)
+        public List<SelectionItem<int>> ScanCameras(int maxTest = 8)
         {
-            List<SelectionItem<int>> cameras = new();
+            var cameras = new ConcurrentBag<SelectionItem<int>>();
 
-            for (int i = 0; i < maxTest; i++)
+            // Sử dụng Parallel để quét nhanh hơn vì VideoCapture(i) tốn thời gian khởi tạo driver
+            Parallel.For(0, maxTest, i =>
             {
                 try
                 {
-                    using var cap = new VideoCapture(i);
+                    // Thêm VideoCaptureAPIs.DSHOW để quét nhanh hơn trên Windows
+                    using var cap = new VideoCapture(i, VideoCaptureAPIs.DSHOW);
 
                     if (cap.IsOpened())
                     {
@@ -53,9 +58,9 @@ namespace Motion_App.Service
                 catch
                 {
                 }
-            }
+            });
 
-            return cameras;
+            return cameras.OrderBy(c => c.Value).ToList();
         }
 
         // =========================

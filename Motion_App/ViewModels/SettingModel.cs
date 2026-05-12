@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Motion_App.Service;
 using OpenCvSharp;
@@ -14,15 +14,8 @@ namespace Motion_App.ViewModels
         // SERIAL PARAMETERS
         // =====================================================
 
-        public ObservableCollection<SelectionItem<string>> Ports { get; }
-            = new()
-        {
-            new() { Value = "COM3", Display = "COM3" },
-            new() { Value = "COM5", Display = "COM5" },
-            new() { Value = "COM7", Display = "COM7" },
-            new() { Value = "COM9", Display = "COM9" },
-            new() { Value = "COM11", Display = "COM11" }
-        };
+        [ObservableProperty]
+        private ObservableCollection<SelectionItem<string>> _ports = new();
 
         [ObservableProperty]
         private SelectionItem<string>? _selectedPort;
@@ -84,15 +77,23 @@ namespace Motion_App.ViewModels
         public SettingModel()
         {
             // Default selections
-
-            SelectedPort = Ports[1];
-
             SelectedBaudRate = BaudRates[4];
-
             SelectedDataBits = DataBits[1];
-
             SelectedParity = Parities[0];
 
+            // Auto scan on initialization
+            // _ = ScanCameras();
+            // _ = ScanPorts();
+
+            // Subscribe to hardware changes (Plug & Play)
+            HardwareWatcherService.Instance.HardwareChanged += OnHardwareChanged;
+        }
+
+        private void OnHardwareChanged()
+        {
+            // Trigger scans when hardware changes are detected
+            _ = ScanCameras();
+            _ = ScanPorts();
         }
 
         // =====================================================
@@ -102,22 +103,81 @@ namespace Motion_App.ViewModels
         [RelayCommand]
         private async Task ScanCameras()
         {
-            var cameras = await Task.Run(() =>
+            var cameras = await Task.Run(() => WebCamService.Instance.ScanCameras());
+
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                return WebCamService.Instance.ScanCameras();
+                var currentSelection = SelectedCamera?.Value;
+                
+                CameraList.Clear();
+                foreach (var cam in cameras)
+                {
+                    CameraList.Add(cam);
+                }
+
+                // Restore selection if it still exists
+                if (currentSelection != null)
+                {
+                    var found = CameraList.FirstOrDefault(c => c.Value == currentSelection);
+                    if (found != null)
+                    {
+                        SelectedCamera = found;
+                        return;
+                    }
+                }
+
+                // Fallback to first if nothing selected or current gone
+                if (CameraList.Count > 0)
+                {
+                    SelectedCamera = CameraList[0];
+                }
+                else
+                {
+                    SelectedCamera = null;
+                }
             });
+        }
 
-            CameraList.Clear();
+        // =====================================================
+        // SCAN PORTS
+        // =====================================================
 
-            foreach (var cam in cameras)
+        [RelayCommand]
+        private async Task ScanPorts()
+        {
+            var portNames = await Task.Run(() => SerialService.ScanSerialPort());
+
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                CameraList.Add(cam);
-            }
+                var currentSelection = SelectedPort?.Value;
 
-            if (CameraList.Count > 0)
-            {
-                SelectedCamera = CameraList[0];
-            }      
+                Ports.Clear();
+                foreach (var name in portNames)
+                {
+                    Ports.Add(new SelectionItem<string> { Value = name, Display = name });
+                }
+
+                // Restore selection if it still exists
+                if (currentSelection != null)
+                {
+                    var found = Ports.FirstOrDefault(p => p.Value == currentSelection);
+                    if (found != null)
+                    {
+                        SelectedPort = found;
+                        return;
+                    }
+                }
+
+                // Fallback
+                if (Ports.Count > 0)
+                {
+                    SelectedPort = Ports[0];
+                }
+                else
+                {
+                    SelectedPort = null;
+                }
+            });
         }
         // =====================================================
         // APPLY CAMERA SOURCE

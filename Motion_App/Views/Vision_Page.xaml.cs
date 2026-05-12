@@ -1,4 +1,4 @@
-﻿using Motion_App.ViewModels;
+using Motion_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +21,11 @@ namespace Motion_App.View
     /// <summary>
     /// Interaction logic for Vision_Page.xaml
     /// </summary>
-    public partial class Vision_Page : Page
+    public partial class Vision_Page : UserControl
     {
         public Vision_Page()
         {
             InitializeComponent();
-            DataContext = new VisionModel();
             // Ensure initial mode state after controls are created
             // Set the default toggle programmatically so Checked fires when all named controls are initialized
             BtnOpenCVMode.IsChecked = true;

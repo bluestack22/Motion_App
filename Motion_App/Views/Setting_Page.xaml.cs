@@ -1,4 +1,4 @@
-﻿using Motion_App.ViewModels;
+using Motion_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,28 +19,26 @@ namespace Motion_App.View
     /// <summary>
     /// Interaction logic for Setting_Page.xaml
     /// </summary>
-    public partial class Setting_Page : Page
+    public partial class Setting_Page : UserControl
     {
-        private readonly SettingModel _viewModel;
         public Setting_Page()
         {
             InitializeComponent();
-            // Create VM
-            _viewModel = new SettingModel();
-
-            // Bind DataContext
-            DataContext = _viewModel;
 
             // UI init
             UpdateConnectionPanels();
             UpdateCameraPanels();
 
             // Scan camera sau khi UI loaded
-            Loaded += Setting_Page_Loaded;
+            // Loaded += Setting_Page_Loaded;
         }
-        private async void Setting_Page_Loaded(object sender, RoutedEventArgs e)
+        private void Setting_Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await _viewModel.ScanCamerasCommand.ExecuteAsync(null);
+            if (DataContext is SettingModel vm)
+            {
+                vm.ScanCamerasCommand.ExecuteAsync(null);
+                vm.ScanPortsCommand.ExecuteAsync(null);
+            }
         }
 
         private void ConnectionTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -108,7 +106,7 @@ namespace Motion_App.View
                     panel.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            if (text.StartsWith("Camera thuong", StringComparison.OrdinalIgnoreCase))
+            if (text.StartsWith("Camera PC", StringComparison.OrdinalIgnoreCase))
             {
                 Show(NormalCameraPanel, true);
                 Show(BaslerCameraPanel, false);
